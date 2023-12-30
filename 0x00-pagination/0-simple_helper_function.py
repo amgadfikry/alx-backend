@@ -12,6 +12,6 @@ def index_range(page, page_size):
             tuple of index start and end of items
     """
     if page < 1:
-        return (0,0)
+        return (0, 0)
     end = page * page_size
     return (end - page_size, end)
