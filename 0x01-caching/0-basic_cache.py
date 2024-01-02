@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ basic cache module """
 from base_caching import BaseCaching
+from typing import Union
 
 
 class BasicCache(BaseCaching):
@@ -8,7 +9,7 @@ class BasicCache(BaseCaching):
         how to save item and how get in cache
     """
 
-    def put(self, key, item):
+    def put(self, key: Union[None, str], item: Union[str, None]) -> None:
         """ method to add new item to cache
             params:
                 key: key of new item
@@ -17,13 +18,11 @@ class BasicCache(BaseCaching):
         if key is not None or item is not None:
             self.cache_data[key] = item
 
-    def get(self, key):
+    def get(self, key: Union[None, str]) -> Union[str, None]:
         """ method to get item from cache
             params:
                 key: key of new item
         """
-        if key is None:
-        	return None
         value = self.cache_data.get(key)
         if value:
             return value
