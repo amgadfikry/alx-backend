@@ -23,7 +23,7 @@ class LFUCache(BaseCaching):
             li_keys = [
                 k for k, v in self.order.items() if v['order'] == min_val]
             if len(li_keys) > 1:
-                max_time = max([self.order[k]['time'] for k in li_keys])
+                max_time = min([self.order[k]['time'] for k in li_keys])
                 li_keys = [
                     k for k in li_keys if self.order[k]['time'] == max_time]
             print(f'DISCARD: {li_keys[0]}')
