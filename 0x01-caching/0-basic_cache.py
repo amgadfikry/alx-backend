@@ -23,7 +23,6 @@ class BasicCache(BaseCaching):
             params:
                 key: key of new item
         """
-        value = self.cache_data.get(key)
-        if value:
-            return value
-        return None
+        if key is None or key not in self.cache_data:
+        	return None
+        return self.cache_data.get(key)
