@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ module represent first in first out """
 from base_caching import BaseCaching
+import time
 
 
 class LRUCache(BaseCaching):
@@ -24,7 +25,7 @@ class LRUCache(BaseCaching):
             del self.cache_data[li_keys[0]]
             del self.order[li_keys[0]]
         self.cache_data[key] = item
-        self.order[key] = 0
+        self.order[key] = time.time()
 
     def get(self, key):
         """ method to get item from cache
@@ -32,5 +33,5 @@ class LRUCache(BaseCaching):
                 key: key of new item
         """
         if key in self.order:
-            self.order[key] += 1
+            self.order[key] = time.time()
         return self.cache_data.get(key, None)
