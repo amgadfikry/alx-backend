@@ -36,17 +36,20 @@ users = {
 
 
 def get_user():
-    """ function that return user """
-    login_as = request.args.get('login_as')
-    if login_as and int(login_as) in users:
-        return users[int(login_as)]
+    """Retrieves a user based on a user id.
+    """
+    login_id = request.args.get('login_as')
+    if login_id:
+        return users.get(int(login_id))
     return None
 
 
 @app.before_request
 def before_request():
-    """ function that find user and set it as global on flask.g.user """
-    g.user = get_user(request.args.get('login_as'))
+    """Performs some routines before each request's resolution.
+    """
+    user = get_user()
+    g.user = user
 
 
 @app.route('/')
