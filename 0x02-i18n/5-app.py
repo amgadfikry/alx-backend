@@ -35,7 +35,7 @@ users = {
 }
 
 
-def get_user(login_as):
+def get_user():
     """ function that return user """
     login_as = request.args.get('login_as')
     if login_as and int(login_as) in users:
