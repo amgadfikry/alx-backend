@@ -5,6 +5,7 @@ from flask_babel import Babel
 
 
 app = Flask(__name__)
+babel = Babel(app)
 
 
 class Config:
@@ -15,14 +16,13 @@ class Config:
 
 
 app.config.from_object(Config)
-babel = Babel(app)
 
 
+@babel.localeselector
 def get_locale():
     """ determine best match with language """
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
-babel.init_app(app, locale_selector=get_locale)
 
 @app.route('/')
 def get_template():
