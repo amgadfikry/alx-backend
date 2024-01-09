@@ -17,6 +17,7 @@ class Config:
 
 app.config.from_object(Config)
 
+
 @babel.localeselector
 def get_locale():
     """ determine best match with language """
@@ -24,7 +25,6 @@ def get_locale():
     if requested_locale and requested_locale in app.config['LANGUAGES']:
         return requested_locale
     return request.accept_languages.best_match(app.config['LANGUAGES'])
-
 
 
 @app.route('/')
