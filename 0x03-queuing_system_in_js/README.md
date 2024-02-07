@@ -195,3 +195,67 @@ Now that you created a job creator, let’s add tests:
 Requirements:
 - Make sure to enter the test mode without processing the jobs before executing the tests
 - Make sure to clear the queue and exit the test mode after executing the tests
+
+#### 9-stock.js
+Data
+Create an array listProducts containing the list of the following products:
+- Id: 1, name: Suitcase 250, price: 50, stock: 4
+- Id: 2, name: Suitcase 450, price: 100, stock: 10
+- Id: 3, name: Suitcase 650, price: 350, stock: 2
+- Id: 4, name: Suitcase 1050, price: 550, stock: 5
+Data access
+Create a function named getItemById:
+- It will take id as argument
+- It will return the item from listProducts with the same id
+Server
+Create an express server listening on the port 1245. (You will start it via: npm run dev 9-stock.js)
+Products
+Create the route GET /list_products that will return the list of every available product with the following JSON format:
+In stock in Redis
+Create a client to connect to the Redis server:
+- Write a function reserveStockById that will take itemId and stock as arguments:
+- It will set in Redis the stock for the key item.ITEM_ID
+- Write an async function getCurrentReservedStockById, that will take itemId as an argument:
+- It will return the reserved stock for a specific item
+Product detail
+Create the route GET /list_products/:itemId, that will return the current product and the current available stock (by using getCurrentReservedStockById)
+Reserve a product
+Create the route GET /reserve_product/:itemId:
+Requirements:
+- Make sure to use promisify with Redis
+- Make sure to use the await/async keyword to get the value from Redis
+- Make sure the format returned by the web application is always JSON and not text
+
+#### 100-seat.js
+Redis
+Create a Redic client:
+- Create a function reserveSeat, that will take into argument number, and set the key available_seats with the number
+- Create a function getCurrentAvailableSeats, it will return the current number of available seats (by using promisify for Redis)
+- When launching the application, set the number of available to 50
+- Initialize the boolean reservationEnabled to true - it will be turn to false when no seat will be available
+- Kue queue
+- Create a Kue queue
+Server
+- Create an express server listening on the port 1245. (You will start it via: npm run dev 100-seat.js)
+- Add the route GET /available_seats that returns the number of seat available:
+- Add the route GET /reserve_seat that:
+- Returns { "status": "Reservation are blocked" } if reservationEnabled is false
+- Creates and queues a job in the queue reserve_seat:
+- Save the job and return:
+- { "status": "Reservation in process" } if no error
+- Otherwise: { "status": "Reservation failed" }
+- When the job is completed, print in the console: Seat reservation job JOB_ID completed
+- When the job failed, print in the console: Seat reservation job JOB_ID failed: ERROR_MESSAGE
+- Add the route GET /process that:
+- Returns { "status": "Queue processing" } just after:
+- Process the queue reserve_seat (async):
+- Decrease the number of seat available by using getCurrentAvailableSeats and reserveSeat
+- If the new number of available seats is equal to 0, set reservationEnabled to false
+- If the new number of available seats is more or equal than 0, the job is successful
+- Otherwise, fail the job with an Error with the message Not enough seats available
+Requirements:
+- Make sure to use promisify with Redis
+- Make sure to use the await/async keyword to get the value from Redis
+- Make sure the format returned by the web application is always JSON and not text
+- Make sure that only the allowed amount of seats can be reserved
+- Make sure that the main route is displaying the right number of seats
